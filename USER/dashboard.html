@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Karyawan - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Sembunyikan scrollbar tapi tetap bisa scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans antialiased flex h-screen overflow-hidden">
+
+    <!-- Sidebar / Navigasi Kiri -->
+    <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64 bg-gray-800">
+            <div class="flex items-center justify-center h-16 bg-gray-900">
+                <span class="text-white font-bold text-xl uppercase tracking-wider">Portal Internal</span>
+            </div>
+            <div class="flex-1 flex flex-col overflow-y-auto no-scrollbar">
+                <nav class="flex-1 px-2 py-4 space-y-2">
+                    
+                    <a href="dashboard.html" class="bg-gray-900 text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-home text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Beranda
+                    </a>
+                    
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-tasks text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Tugas Saya
+                    </a>
+                    
+                    <a href="direktori-staf.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-address-book text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Direktori Staf
+                    </a>
+
+                    <a href="bantuan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-question-circle text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Pusat Bantuan
+                    </a>
+
+                    <a href="alat-bantuan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-toolbox text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Alat Bantuan Dokumen
+                    </a>
+
+                    <a href="jadwal-rapat.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-plus text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Jadwal Rapat
+                    </a>
+
+                    <a href="kalender-kegiatan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-alt text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Kalender Kegiatan
+                    </a>
+
+                    <a href="profile.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-user-circle text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Profil Saya
+                    </a>
+
+                    <a href="/logout" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md mt-8">
+                        <i class="fas fa-sign-out-alt text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Logout
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Area Konten Utama -->
+    <div class="flex flex-col w-0 flex-1 overflow-hidden">
+        
+        <!-- Header (Bagian Atas) -->
+        <div class="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
+            <button type="button" class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none md:hidden">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+            <div class="flex-1 px-4 flex justify-between items-center">
+                <h2 class="text-2xl font-semibold text-gray-800">Beranda</h2>
+                
+                <div class="ml-4 flex items-center">
+                    <div class="flex items-center gap-3 cursor-pointer">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-sm font-medium text-gray-700">{{ user_name or 'Pengguna' }}</p>
+                            <p class="text-xs text-gray-500">Staf</p>
+                        </div>
+                        <img class="h-9 w-9 rounded-full border border-gray-200" src="https://ui-avatars.com/api/?name={{ user_name or 'P' }}&background=2563EB&color=fff" alt="Profil">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kanvas Konten -->
+        <main class="flex-1 relative overflow-y-auto focus:outline-none bg-gray-50 no-scrollbar">
+            <div class="py-6">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+
+                    <!-- Header Selamat Datang -->
+                    <div class="bg-white shadow rounded-lg p-6 mb-8">
+                        <h3 class="text-xl font-bold text-gray-900">Selamat Datang Kembali, {{ user_name or 'Pengguna' }}!</h3>
+                        <p class="text-gray-600 mt-1">Berikut adalah ringkasan aktivitas Anda hari ini.</p>
+                    </div>
+
+                    <!-- Grid Widget Statistik -->
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+                        <!-- Widget 1: Tugas Aktif -->
+                        <div class="bg-white overflow-hidden shadow rounded-lg border-l-4 border-blue-500">
+                            <div class="px-4 py-5 sm:p-6 flex items-center">
+                                <div class="flex-shrink-0 bg-blue-50 rounded-md p-3">
+                                    <i class="fas fa-clipboard-list text-blue-600 text-xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Tugas Aktif</dt>
+                                    <dd class="text-2xl font-bold text-gray-900">5</dd>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Widget 2: Proyek Selesai -->
+                        <div class="bg-white overflow-hidden shadow rounded-lg border-l-4 border-green-500">
+                            <div class="px-4 py-5 sm:p-6 flex items-center">
+                                <div class="flex-shrink-0 bg-green-50 rounded-md p-3">
+                                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Proyek Selesai</dt>
+                                    <dd class="text-2xl font-bold text-gray-900">12</dd>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Widget 3: Pesan Baru -->
+                        <div class="bg-white overflow-hidden shadow rounded-lg border-l-4 border-yellow-500">
+                            <div class="px-4 py-5 sm:p-6 flex items-center">
+                                <div class="flex-shrink-0 bg-yellow-50 rounded-md p-3">
+                                    <i class="fas fa-envelope text-yellow-600 text-xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Pesan Baru</dt>
+                                    <dd class="text-2xl font-bold text-gray-900">3</dd>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grid Konten Utama: Tugas & Pengumuman -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        
+                        <!-- Kolom Kiri: Tugas Terbaru -->
+                        <div class="lg:col-span-2 bg-white shadow rounded-lg">
+                            <div class="p-6 border-b border-gray-200">
+                                <h3 class="text-lg font-medium text-gray-900">Tugas Terbaru Anda</h3>
+                            </div>
+                            <ul class="divide-y divide-gray-200">
+                                <li class="flex items-center justify-between p-4 hover:bg-gray-50">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-file-alt text-gray-400 mr-4"></i>
+                                        <div>
+                                            <p class="text-gray-800 font-medium">Desain Ulang Halaman Produk</p>
+                                            <p class="text-sm text-gray-500">Proyek "Phoenix" - Jatuh tempo dalam 3 hari</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-yellow-600 bg-yellow-200">
+                                        Dalam Proses
+                                    </span>
+                                </li>
+                                <li class="flex items-center justify-between p-4 hover:bg-gray-50">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-bug text-gray-400 mr-4"></i>
+                                        <div>
+                                            <p class="text-gray-800 font-medium">Perbaiki Bug Login di Mobile</p>
+                                            <p class="text-sm text-gray-500">Proyek "Internal Tools" - Jatuh tempo besok</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-red-600 bg-red-200">
+                                        Prioritas Tinggi
+                                    </span>
+                                </li>
+                                <li class="flex items-center justify-between p-4 hover:bg-gray-50">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-file-alt text-gray-400 mr-4"></i>
+                                        <div>
+                                            <p class="text-gray-800 font-medium">Laporan Analisis Kinerja Q2</p>
+                                            <p class="text-sm text-gray-500">Proyek "Laporan Rutin"</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200">
+                                        Selesai
+                                    </span>
+                                </li>
+                                 <li class="flex items-center justify-between p-4 hover:bg-gray-50">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-users text-gray-400 mr-4"></i>
+                                        <div>
+                                            <p class="text-gray-800 font-medium">Rapat Kick-off Proyek "Orion"</p>
+                                            <p class="text-sm text-gray-500">Hari ini, 14:00 WIB</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200">
+                                        Akan Datang
+                                    </span>
+                                </li>
+                            </ul>
+                            <div class="p-4 text-center border-t border-gray-200">
+                                <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-800">Lihat Semua Tugas</a>
+                            </div>
+                        </div>
+
+                        <!-- Kolom Kanan: Pengumuman -->
+                        <div class="bg-white shadow rounded-lg">
+                            <div class="p-6 border-b border-gray-200">
+                                <h3 class="text-lg font-medium text-gray-900 flex items-center">
+                                    <i class="fas fa-bullhorn text-indigo-500 mr-3"></i>
+                                    Pengumuman
+                                </h3>
+                            </div>
+                            <div id="pengumuman-container" class="p-6 space-y-4">
+                                <!-- Pengumuman akan dimuat di sini -->
+                                <p class="text-center text-gray-500 py-4"><i class="fas fa-spinner fa-spin mr-2"></i> Memuat pengumuman...</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const container = document.getElementById('pengumuman-container');
+        const API_URL = '/api/pengumuman'; // Menggunakan path relatif
+
+        try {
+            const response = await fetch(API_URL);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Gagal mengambil data pengumuman.');
+            }
+
+            const announcements = await response.json();
+            container.innerHTML = ''; // Kosongkan container
+
+            if (announcements.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500">Tidak ada pengumuman saat ini.</p>';
+                return;
+            }
+
+            const colorMap = { 'indigo': 'border-indigo-400', 'teal': 'border-teal-400', 'yellow': 'border-yellow-400', 'red': 'border-red-400' };
+
+            announcements.forEach(ann => {
+                const annElement = document.createElement('div');
+                const borderColorClass = colorMap[ann.category] || 'border-gray-400';
+
+                annElement.className = `border-l-4 ${borderColorClass} pl-4`;
+                annElement.innerHTML = `
+                    <h4 class="font-semibold text-gray-800">${ann.title}</h4>
+                    <p class="text-sm text-gray-600 mt-1">${ann.content}</p>
+                    <p class="text-xs text-gray-400 mt-2">Diposting: ${ann.date}</p>
+                `;
+                container.appendChild(annElement);
+            });
+
+        } catch (error) {
+            console.error('Error fetching announcements:', error);
+            container.innerHTML = `<p class="text-center text-red-500">Gagal memuat pengumuman.</p>`;
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Karyawan - Direktori Staf</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        /* Styling untuk Organizational Chart */
+        .org-chart {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            padding-bottom: 2rem;
+            align-items: center; /* Menengahkan konten bagan secara vertikal */
+        }
+        .org-chart ul {
+            padding-top: 20px;
+            position: relative;
+            transition: all 0.5s;
+            display: flex;
+        }
+        .org-chart li {
+            float: left;
+            text-align: center;
+            list-style-type: none;
+            position: relative;
+            padding: 20px 5px 0 5px;
+            transition: all 0.5s;
+        }
+        /* Garis konektor */
+        .org-chart li::before, .org-chart li::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 50%;
+            border-top: 2px solid #ccc;
+            width: 50%;
+            height: 20px;
+        }
+        .org-chart li::after {
+            right: auto;
+            left: 50%;
+            border-left: 2px solid #ccc;
+        }
+        /* Hapus konektor kiri/kanan untuk node tunggal dan node pertama/terakhir */
+        .org-chart li:only-child {
+            padding-top: 0;
+        }
+        .org-chart li:only-child::after, .org-chart li:only-child::before {
+            display: none;
+        }
+        .org-chart li:first-child::before, .org-chart li:last-child::after {
+            border: 0 none;
+        }
+        .org-chart li:last-child::before {
+            border-right: 2px solid #ccc;
+            border-radius: 0 5px 0 0;
+        }
+        .org-chart li:first-child::after {
+            border-radius: 5px 0 0 0;
+        }
+        /* Garis vertikal ke bawah dari parent */
+        .org-chart ul ul::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            border-left: 2px solid #ccc;
+            width: 0;
+            height: 20px;
+        }
+        /* Kotak node staf */
+        .staf-node {
+            border: 1px solid #ccc;
+            padding: 0.75rem 1rem;
+            display: inline-block;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            min-width: 160px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .staf-node:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-color: #3b82f6; /* blue-500 */
+        }
+        /* Detail yang muncul saat hover */
+        .staf-details {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            top: calc(100% + 15px); /* Muncul di bawah node */
+            left: 50%;
+            transform: translateX(-50%) scale(0.95);
+            width: 250px;
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            z-index: 10;
+            text-align: left;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+        }
+        .staf-node:hover .staf-details {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+        /* Panah kecil di atas detail box */
+        .staf-details::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -8px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: transparent transparent white transparent;
+        }
+        /* Sembunyikan scrollbar tapi tetap bisa scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans antialiased flex h-screen overflow-hidden">
+
+    <!-- Sidebar Navigasi -->
+    <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64 bg-gray-800">
+            <div class="flex items-center justify-center h-16 bg-gray-900">
+                <span class="text-white font-bold text-xl uppercase tracking-wider">Portal Internal</span>
+            </div>
+            <div class="flex-1 flex flex-col overflow-y-auto no-scrollbar">
+                <nav class="flex-1 px-2 py-4 space-y-2">
+                    
+                    <a href="dashboard.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-home text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Beranda
+                    </a>
+                    
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-tasks text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Tugas Saya
+                    </a>
+                    
+                    <a href="direktori-staf.html" class="bg-gray-900 text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-address-book text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Direktori Staf
+                    </a>
+
+                    <a href="bantuan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-question-circle text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Pusat Bantuan
+                    </a>
+
+                    <a href="alat-bantuan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-toolbox text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Alat Bantuan Dokumen
+                    </a>
+
+                    <a href="jadwal-rapat.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-plus text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Jadwal Rapat
+                    </a>
+
+                    <a href="kalender-kegiatan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-alt text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Kalender Kegiatan
+                    </a>
+
+                    <a href="profile.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-user-circle text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Profil Saya
+                    </a>
+
+                    <a href="/logout" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md mt-8">
+                        <i class="fas fa-sign-out-alt text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Logout
+                    </a>
+
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Konten Utama -->
+    <div class="flex flex-col w-0 flex-1 overflow-hidden">
+        <div class="relative z-10 flex-shrink-0 flex h-16 bg-white shadow items-center px-4 justify-between">
+            <h2 class="text-2xl font-semibold text-gray-800">Direktori Staf & Kontak Internal</h2>
+            <div class="text-right hidden sm:block">
+                <p class="text-sm font-medium text-gray-700">Akun Staf</p>
+            </div>
+        </div>
+
+        <main class="flex-1 relative flex flex-col focus:outline-none bg-gray-50 p-6 no-scrollbar">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                <p class="text-gray-600 mb-8 text-center">Arahkan kursor ke setiap kotak untuk melihat detail kontak staf.</p>
+            </div>
+
+            <!-- Struktur Organizational Chart -->
+            <div class="org-chart no-scrollbar flex-1 overflow-x-auto">
+                <ul>
+                    <!-- Level 1: Komandan -->
+                    <li>
+                        <div class="staf-node">
+                            <h3 class="text-md font-bold text-gray-900">Jenderal Budi</h3>
+                            <p class="text-xs text-red-600 font-medium">Komandan</p>
+                            <div class="staf-details">
+                                <div class="flex items-center mb-3"><img class="h-16 w-16 rounded-full mr-4 border-2 border-red-200" src="https://ui-avatars.com/api/?name=Jenderal+Budi&background=DC2626&color=fff"><div><h3 class="text-lg font-bold text-gray-900">Jenderal Budi</h3><p class="text-sm text-red-600 font-medium">Komandan</p></div></div><hr class="my-2"><p class="text-sm text-gray-600 mt-2"><i class="fas fa-envelope mr-2 text-gray-400"></i> jend.budi@internal.com</p><p class="text-sm text-gray-600 mt-1"><i class="fas fa-phone mr-2 text-gray-400"></i> +62 811-0000-0001</p>
+                            </div>
+                        </div>
+                        <!-- Level 2: Wakil Komandan -->
+                        <ul>
+                            <li>
+                                <div class="staf-node">
+                                    <h3 class="text-md font-bold text-gray-900">Jenderal Ahmad</h3>
+                                    <p class="text-xs text-orange-500 font-medium">Wakil Komandan</p>
+                                    <div class="staf-details">
+                                        <div class="flex items-center mb-3"><img class="h-16 w-16 rounded-full mr-4 border-2 border-orange-200" src="https://ui-avatars.com/api/?name=Jenderal+Ahmad&background=F97316&color=fff"><div><h3 class="text-lg font-bold text-gray-900">Jenderal Ahmad</h3><p class="text-sm text-orange-500 font-medium">Wakil Komandan</p></div></div><hr class="my-2"><p class="text-sm text-gray-600 mt-2"><i class="fas fa-envelope mr-2 text-gray-400"></i> jend.ahmad@internal.com</p><p class="text-sm text-gray-600 mt-1"><i class="fas fa-phone mr-2 text-gray-400"></i> +62 811-0000-0002</p>
+                                    </div>
+                                </div>
+                                <!-- Level 3: Asisten & Komandan Satuan (Satu Garis) -->
+                                <ul>
+                                    <li>
+                                        <div class="staf-node">
+                                            <h3 class="text-md font-bold text-gray-900">Kolonel Siti</h3>
+                                            <p class="text-xs text-blue-600 font-medium">Asintelops</p>
+                                            <div class="staf-details">
+                                                <div class="flex items-center mb-3"><img class="h-16 w-16 rounded-full mr-4 border-2 border-blue-200" src="https://ui-avatars.com/api/?name=Kolonel+Siti&background=3B82F6&color=fff"><div><h3 class="text-lg font-bold text-gray-900">Kolonel Siti</h3><p class="text-sm text-blue-600 font-medium">Asisten Intelijen & Operasi</p></div></div><hr class="my-2"><p class="text-sm text-gray-600 mt-2"><i class="fas fa-envelope mr-2 text-gray-400"></i> kol.siti@internal.com</p><p class="text-sm text-gray-600 mt-1"><i class="fas fa-phone mr-2 text-gray-400"></i> +62 812-0000-0003</p>
+                                            </div>
+                                        </div>
+                                        <!-- Level 4: Satuan di bawah Asintelops -->
+                                        <ul>
+                                            <li>
+                                                <div class="staf-node bg-gray-100 border-gray-300 pointer-events-none">
+                                                    <h3 class="text-md font-bold text-gray-800">Komandan Satuan</h3>
+                                                    <p class="text-xs text-gray-500 font-medium">Grup Intel/Ops</p>
+                                                </div>
+                                                <!-- Level 5: Para Dansat -->
+                                                <ul>
+                                                    <li>
+                                                        <div class="staf-node">
+                                                            <h3 class="text-md font-bold text-gray-900">Mayor Ridwan</h3>
+                                                            <p class="text-xs text-cyan-600 font-medium">Dansat Certan</p>
+                                                            <div class="staf-details">
+                                                                <div class="flex items-center mb-3"><img class="h-16 w-16 rounded-full mr-4 border-2 border-cyan-200" src="https://ui-avatars.com/api/?name=Mayor+Ridwan&background=0891B2&color=fff"><div><h3 class="text-lg font-bold text-gray-900">Mayor Ridwan</h3><p class="text-sm text-cyan-600 font-medium">Komandan Satuan Cyber Pertahanan</p></div></div><hr class="my-2"><p class="text-sm text-gray-600 mt-2"><i class="fas fa-envelope mr-2 text-gray-400"></i> myr.ridwan@internal.com</p><p class="text-sm text-gray-600 mt-1"><i class="fas fa-phone mr-2 text-gray-400"></i> +62 813-0000-0005</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="staf-node">
+                                                            <h3 class="text-md font-bold text-gray-900">Mayor Prasetyo</h3>
+                                                            <p class="text-xs text-cyan-600 font-medium">Dansat Linta</p>
+                                                            <div class="staf-details">
+                                                                <div class="flex items-center mb-3"><img class="h-16 w-16 rounded-full mr-4 border-2 border-cyan-200" src="https://ui-avatars.com/api/?name=Mayor+Prasetyo&background=0891B2&color=fff"><div><h3 class="text-lg font-bold text-gray-900">Mayor Prasetyo</h3><p class="text-sm text-cyan-600 font-medium">Komandan Satuan Lintas Udara</p></div></div><hr class="my-2"><p class="text-sm text-gray-600 mt-2"><i class="fas fa-envelope mr-2 text-gray-400"></i> myr.prasetyo@internal.com</p><p class="text-sm text-gray-600 mt-1"><i class="fas fa-phone mr-2 text-gray-400"></i> +62 813-0000-0006</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <div class="staf-node">
+                                            <h3 class="text-md font-bold text-gray-900">Kolonel Dewi</h3>
+                                            <p class="text-xs text-indigo-600 font-medium">Asiminlog</p>
+                                            <div class="staf-details">
+                                                <div class="flex items-center mb-3"><img class="h-16 w-16 rounded-full mr-4 border-2 border-indigo-200" src="https://ui-avatars.com/api/?name=Kolonel+Dewi&background=4F46E5&color=fff"><div><h3 class="text-lg font-bold text-gray-900">Kolonel Dewi</h3><p class="text-sm text-indigo-600 font-medium">Asisten Administrasi & Logistik</p></div></div><hr class="my-2"><p class="text-sm text-gray-600 mt-2"><i class="fas fa-envelope mr-2 text-gray-400"></i> kol.dewi@internal.com</p><p class="text-sm text-gray-600 mt-1"><i class="fas fa-phone mr-2 text-gray-400"></i> +62 812-0000-0004</p>
+                                            </div>
+                                        </div>
+                                        <!-- Level 4: Satuan di bawah Asiminlog -->
+                                        <ul>
+                                            <li>
+                                                <div class="staf-node bg-gray-100 border-gray-300 pointer-events-none">
+                                                    <h3 class="text-md font-bold text-gray-800">Komandan Satuan</h3>
+                                                    <p class="text-xs text-gray-500 font-medium">Grup Admin/Log</p>
+                                                </div>
+                                                <!-- Level 5: Para Dansat -->
+                                                <ul>
+                                                    <li>
+                                                        <div class="staf-node">
+                                                            <h3 class="text-md font-bold text-gray-900">Mayor Nurhaliza</h3>
+                                                            <p class="text-xs text-purple-600 font-medium">Dansat Indigi</p>
+                                                            <div class="staf-details">
+                                                                <div class="flex items-center mb-3"><img class="h-16 w-16 rounded-full mr-4 border-2 border-purple-200" src="https://ui-avatars.com/api/?name=Mayor+Nurhaliza&background=7C3AED&color=fff"><div><h3 class="text-lg font-bold text-gray-900">Mayor Nurhaliza</h3><p class="text-sm text-purple-600 font-medium">Komandan Satuan Industri Digital</p></div></div><hr class="my-2"><p class="text-sm text-gray-600 mt-2"><i class="fas fa-envelope mr-2 text-gray-400"></i> myr.nurhaliza@internal.com</p><p class="text-sm text-gray-600 mt-1"><i class="fas fa-phone mr-2 text-gray-400"></i> +62 813-0000-0007</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="staf-node">
+                                                            <h3 class="text-md font-bold text-gray-900">Mayor Lestari</h3>
+                                                            <p class="text-xs text-purple-600 font-medium">Dansat Deltan</p>
+                                                            <div class="staf-details">
+                                                                <div class="flex items-center mb-3"><img class="h-16 w-16 rounded-full mr-4 border-2 border-purple-200" src="https://ui-avatars.com/api/?name=Mayor+Lestari&background=7C3AED&color=fff"><div><h3 class="text-lg font-bold text-gray-900">Mayor Lestari</h3><p class="text-sm text-purple-600 font-medium">Komandan Satuan Delta Tani</p></div></div><hr class="my-2"><p class="text-sm text-gray-600 mt-2"><i class="fas fa-envelope mr-2 text-gray-400"></i> myr.lestari@internal.com</p><p class="text-sm text-gray-600 mt-1"><i class="fas fa-phone mr-2 text-gray-400"></i> +62 813-0000-0008</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>

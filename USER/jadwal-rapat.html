@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Karyawan - Jadwal Rapat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans antialiased flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64 bg-gray-800">
+            <div class="flex items-center justify-center h-16 bg-gray-900">
+                <span class="text-white font-bold text-xl uppercase tracking-wider">Portal Internal</span>
+            </div>
+            <div class="flex-1 flex flex-col overflow-y-auto no-scrollbar">
+                <nav class="flex-1 px-2 py-4 space-y-2">
+                   
+                    <a href="dashboard.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-home text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Beranda
+                    </a>
+                    
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-tasks text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Tugas Saya
+                    </a>
+                    
+                    <a href="direktori-staf.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-address-book text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Direktori Staf
+                    </a>
+
+                    <a href="bantuan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-question-circle text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Pusat Bantuan
+                    </a>
+
+                    <a href="alat-bantuan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-toolbox text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Alat Bantuan Dokumen
+                    </a>
+
+                    <a href="jadwal-rapat.html" class="bg-gray-900 text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-plus text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Jadwal Rapat
+                    </a>
+
+                    <a href="kalender-kegiatan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-alt text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Kalender Kegiatan
+                    </a>
+
+                    <a href="profile.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-user-circle text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Profil Saya
+                    </a>
+
+                    <a href="/logout" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md mt-8">
+                        <i class="fas fa-sign-out-alt text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Logout
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex flex-col w-0 flex-1 overflow-hidden">
+        <div class="relative z-10 flex-shrink-0 flex h-16 bg-white shadow items-center px-4 justify-between">
+            <h2 class="text-2xl font-semibold text-gray-800">Jadwal Rapat</h2>
+            <div class="flex items-center gap-3">
+                <div class="text-right hidden sm:block">
+                    <p class="text-sm font-medium text-gray-700">{{ user_name or 'Pengguna' }}</p>
+                    <p class="text-xs text-gray-500">Staf</p>
+                </div>
+                <img class="h-9 w-9 rounded-full border border-gray-200" src="https://ui-avatars.com/api/?name={{ user_name or 'P' }}&background=2563EB&color=fff" alt="Profil">
+            </div>
+        </div>
+
+        <main class="flex-1 relative overflow-y-auto focus:outline-none bg-gray-50 no-scrollbar p-6">
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <div class="px-6 py-4 border-b">
+                    <h2 class="text-xl font-semibold text-gray-800">Daftar Rapat Terjadwal</h2>
+                    <p class="text-gray-600 mt-1">Berikut adalah jadwal rapat yang akan datang.</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Judul</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal & Waktu</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Peserta</th>
+                            </tr>
+                        </thead>
+                        <tbody id="jadwal-table-body" class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td colspan="3" class="px-6 py-4 text-center text-gray-500">
+                                    <i class="fas fa-spinner fa-spin mr-2"></i> Memuat jadwal rapat...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const tableBodyJadwal = document.getElementById('jadwal-table-body');
+        try {
+            const response = await fetch('/api/meetings');
+            if (!response.ok) {
+                const result = await response.json();
+                throw new Error(result.error || 'Gagal memuat data.');
+            }
+            const meetings = await response.json();
+            tableBodyJadwal.innerHTML = '';
+
+            if (meetings.length === 0) {
+                tableBodyJadwal.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-gray-500">Belum ada rapat yang dijadwalkan.</td></tr>';
+                return;
+            }
+
+            meetings.forEach(meeting => {
+                const row = `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${meeting.judul}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${meeting.tanggal}, ${meeting.waktu}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">${meeting.peserta || '-'}</td>
+                    </tr>
+                `;
+                tableBodyJadwal.insertAdjacentHTML('beforeend', row);
+            });
+        } catch (error) {
+            console.error('Error loading meetings:', error);
+            tableBodyJadwal.innerHTML = `<tr><td colspan="3" class="px-6 py-4 text-center text-red-500">${error.message}</td></tr>`;
+        }
+    });
+</script>
+</body>
+</html>

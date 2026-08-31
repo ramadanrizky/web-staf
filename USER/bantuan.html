@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Karyawan - Bantuan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Sembunyikan scrollbar tapi tetap bisa scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans antialiased flex h-screen overflow-hidden">
+
+    <!-- Sidebar / Navigasi Kiri -->
+    <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64 bg-gray-800">
+            <div class="flex items-center justify-center h-16 bg-gray-900">
+                <span class="text-white font-bold text-xl uppercase tracking-wider">Portal Internal</span>
+            </div>
+            <div class="flex-1 flex flex-col overflow-y-auto no-scrollbar">
+                <nav class="flex-1 px-2 py-4 space-y-2">
+               
+                    <a href="dashboard.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-home text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Beranda
+                    </a>
+                    
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-tasks text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Tugas Saya
+                    </a>
+                    
+                    <a href="direktori-staf.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-address-book text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Direktori Staf
+                    </a>
+
+                    <a href="bantuan.html" class="bg-gray-900 text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-question-circle text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Pusat Bantuan
+                    </a>
+
+                    <a href="alat-bantuan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-toolbox text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Alat Bantuan Dokumen
+                    </a>
+
+                    <a href="jadwal-rapat.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-plus text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Jadwal Rapat
+                    </a>
+
+                    <a href="kalender-kegiatan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-alt text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Kalender Kegiatan
+                    </a>
+
+                    <a href="profile.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-user-circle text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Profil Saya
+                    </a>
+
+                    <a href="/logout" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md mt-8">
+                        <i class="fas fa-sign-out-alt text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Logout
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Area Konten Utama -->
+    <div class="flex flex-col w-0 flex-1 overflow-hidden">
+        
+        <!-- Header (Bagian Atas) -->
+        <div class="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
+            <button type="button" class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none md:hidden">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+            <div class="flex-1 px-4 flex justify-between items-center">
+                <h2 class="text-2xl font-semibold text-gray-800">Pusat Bantuan</h2>
+                
+                <!-- Profil Pengguna -->
+                <div class="ml-4 flex items-center">
+                    <div class="flex items-center gap-3 cursor-pointer">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-sm font-medium text-gray-700">{{ user_name or 'Pengguna' }}</p>
+                            <p class="text-xs text-gray-500">Staf</p>
+                        </div>
+                        <img class="h-9 w-9 rounded-full border border-gray-200" src="https://ui-avatars.com/api/?name={{ user_name or 'P' }}&background=2563EB&color=fff" alt="Profil">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kanvas Konten Bantuan -->
+        <main class="flex-1 relative overflow-y-auto focus:outline-none bg-gray-50 no-scrollbar">
+            <div class="py-6">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                    
+                    <!-- Kartu Info Kontak Cepat -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-blue-600 text-white p-6 rounded-lg shadow-md flex items-center">
+                            <i class="fas fa-phone-alt text-3xl opacity-80 mr-4"></i>
+                            <div>
+                                <h3 class="font-bold text-lg">Hotline IT</h3>
+                                <p class="text-blue-100">Ext: 101 / 102</p>
+                            </div>
+                        </div>
+                        <div class="bg-green-600 text-white p-6 rounded-lg shadow-md flex items-center">
+                            <i class="fas fa-user-md text-3xl opacity-80 mr-4"></i>
+                            <div>
+                                <h3 class="font-bold text-lg">Support</h3>
+                                <p class="text-green-100">nama@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="bg-purple-600 text-white p-6 rounded-lg shadow-md flex items-center">
+                            <i class="fas fa-book text-3xl opacity-80 mr-4"></i>
+                            <div>
+                                <h3 class="font-bold text-lg">Buku Panduan</h3>
+                                <a href="#" class="text-purple-100 hover:underline">Unduh PDF Karyawan</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        
+                        <!-- Kolom Kiri: FAQ -->
+                        <div class="bg-white shadow rounded-lg overflow-hidden">
+                            <div class="px-4 py-5 border-b border-gray-200 bg-gray-50">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                    <i class="fas fa-info-circle text-blue-500 mr-2"></i> Pertanyaan Umum (FAQ)
+                                </h3>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                <div class="border border-gray-200 rounded-md p-4">
+                                    <h4 class="font-semibold text-gray-800 mb-2">Bagaimana cara mereset kata sandi akun portal?</h4>
+                                    <p class="text-gray-600 text-sm">Anda dapat menekan tombol "Lupa Kata Sandi" di halaman Login awal, atau langsung mengirimkan tiket bantuan melalui formulir di samping dengan kategori "Kendala IT & Akses".</p>
+                                </div>
+                                <div class="border border-gray-200 rounded-md p-4">
+                                    <h4 class="font-semibold text-gray-800 mb-2">Ke mana saya harus melapor jika ada tugas yang salah alokasi?</h4>
+                                    <p class="text-gray-600 text-sm">Silakan hubungi manajer proyek terkait melalui fitur "Pesan" atau hubungi atasan Anda secara langsung melalui direktori staf.</p>
+                                </div>
+                                <div class="border border-gray-200 rounded-md p-4">
+                                    <h4 class="font-semibold text-gray-800 mb-2">Bagaimana prosedur pengajuan cuti?</h4>
+                                    <p class="text-gray-600 text-sm">Formulir cuti dapat diunduh di bagian Direktori Dokumen. Setelah diisi, silakan unggah kembali dan teruskan ke email HRD.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Kolom Kanan: Formulir Tiket Bantuan -->
+                        <div class="bg-white shadow rounded-lg overflow-hidden">
+                            <div class="px-4 py-5 border-b border-gray-200 bg-gray-50">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                    <i class="fas fa-headset text-blue-500 mr-2"></i> Buat Tiket Bantuan
+                                </h3>
+                                <p class="mt-1 text-sm text-gray-500">Gunakan formulir ini untuk melaporkan kendala teknis atau pertanyaan administrasi.</p>
+                            </div>
+                            <div class="p-6">
+                                <form action="#" method="POST" class="space-y-4">
+                                    
+                                    <div>
+                                        <label for="kategori" class="block text-sm font-medium text-gray-700">Kategori Bantuan</label>
+                                        <select id="kategori" name="kategori" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border">
+                                            <option>Kendala IT Sistem</option>
+                                            <option>Pertanyaan Administrasi</option>
+                                            <option>Keluhan Fasilitas Kantor</option>
+                                            <option>Lainnya</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label for="subjek" class="block text-sm font-medium text-gray-700">Subjek</label>
+                                        <input type="text" name="subjek" id="subjek" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-2 px-3 border" placeholder="Contoh: Komputer tidak bisa terhubung internet" required>
+                                    </div>
+
+                                    <div>
+                                        <label for="pesan" class="block text-sm font-medium text-gray-700">Deskripsi Kendala</label>
+                                        <div class="mt-1">
+                                            <textarea id="pesan" name="pesan" rows="4" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md py-2 px-3 border" placeholder="Jelaskan kendala Anda secara detail..." required></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="pt-2">
+                                        <button type="submit" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            Kirim Bantuan
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>

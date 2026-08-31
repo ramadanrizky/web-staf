@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Karyawan - Profil Pengguna</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans antialiased flex h-screen overflow-hidden">
+
+    <!-- Sidebar / Navigasi Kiri -->
+    <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64 bg-gray-800">
+            <div class="flex items-center justify-center h-16 bg-gray-900">
+                <span class="text-white font-bold text-xl uppercase tracking-wider">Portal Internal</span>
+            </div>
+            <div class="flex-1 flex flex-col overflow-y-auto no-scrollbar">
+                <nav class="flex-1 px-2 py-4 space-y-2">
+                    
+                    <!-- 1. Beranda -->
+                    <a href="dashboard.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+                        <i class="fas fa-home text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Beranda
+                    </a>
+                    
+                    <!-- 2. Tugas Saya -->
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+                        <i class="fas fa-tasks text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Tugas Saya
+                    </a>
+                    
+                    <!-- 3. Direktori Staf -->
+                    <a href="direktori-staf.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+                        <i class="fas fa-address-book text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Direktori Staf
+                    </a>
+
+                    <!-- 4. Pusat Bantuan -->
+                    <a href="bantuan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+                        <i class="fas fa-question-circle text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Pusat Bantuan
+                    </a>
+
+                    <!-- 5. Alat Bantuan Dokumen -->
+                    <a href="alat-bantuan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+                        <i class="fas fa-toolbox text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Alat Bantuan Dokumen
+                    </a>
+
+                    <!-- Jadwal & Kalender -->
+                    <a href="jadwal-rapat.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-plus text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Jadwal Rapat
+                    </a>
+                    <a href="kalender-kegiatan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-alt text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Kalender Kegiatan
+                    </a>
+
+                    <!-- 6. Profil Pengguna (Aktif) -->
+                    <a href="profile.html" class="bg-gray-900 text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-user-circle text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Profil Saya
+                    </a>
+
+                    <!-- 7. Logout -->
+                    <a href="/logout" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-200 mt-8">
+                        <i class="fas fa-sign-out-alt text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Logout
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Area Konten Utama -->
+    <div class="flex flex-col w-0 flex-1 overflow-hidden">
+        
+        <!-- Header (Bagian Atas) -->
+        <div class="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
+            <button type="button" class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none md:hidden">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+            <div class="flex-1 px-4 flex justify-between items-center">
+                <h2 class="text-2xl font-semibold text-gray-800">Profil Pengguna</h2>
+                
+                <!-- Profil Pengguna -->
+                <div class="ml-4 flex items-center">
+                    <div class="flex items-center gap-3 cursor-pointer">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-sm font-medium text-gray-700">{{ user_name or 'Pengguna' }}</p>
+                            <p class="text-xs text-gray-500">Staf</p>
+                        </div>
+                        <img class="h-9 w-9 rounded-full border border-gray-200" src="https://ui-avatars.com/api/?name={{ user_name or 'P' }}&background=2563EB&color=fff" alt="Profil">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kanvas Konten Profil -->
+        <main class="flex-1 relative overflow-y-auto focus:outline-none bg-gray-50 no-scrollbar">
+            <div class="py-6">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8">
+                    
+                    <div class="bg-white shadow rounded-lg p-6 mb-8">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Informasi Akun</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Nama Lengkap</p>
+                                <p class="mt-1 text-lg text-gray-900">{{ user_name or 'Tidak Diketahui' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Alamat Email</p>
+                                <p class="mt-1 text-lg text-gray-900">{{ user_email or 'Tidak Diketahui' }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white shadow rounded-lg p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Ubah Kata Sandi</h3>
+                        <form id="change-password-form" class="space-y-4">
+                            <div>
+                                <label for="old_password" class="block text-sm font-medium text-gray-700">Kata Sandi Lama</label>
+                                <input type="password" name="old_password" id="old_password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500" required>
+                            </div>
+                            <div>
+                                <label for="new_password" class="block text-sm font-medium text-gray-700">Kata Sandi Baru</label>
+                                <input type="password" name="new_password" id="new_password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500" required>
+                            </div>
+                            <div>
+                                <label for="confirm_new_password" class="block text-sm font-medium text-gray-700">Konfirmasi Kata Sandi Baru</label>
+                                <input type="password" name="confirm_new_password" id="confirm_new_password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500" required>
+                            </div>
+                            <div id="message-area" class="mt-4 text-center text-sm hidden"></div>
+                            <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 font-medium">
+                                Ubah Kata Sandi
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+<script>
+    document.getElementById('change-password-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        const messageArea = document.getElementById('message-area');
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.innerHTML;
+
+        messageArea.classList.add('hidden');
+        messageArea.classList.remove('text-red-600', 'bg-red-100', 'text-green-600', 'bg-green-100');
+        submitButton.disabled = true;
+        submitButton.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...`;
+
+        try {
+            const response = await fetch('/api/change-password', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+
+            messageArea.textContent = result.message || result.error;
+            messageArea.classList.remove('hidden');
+            if (response.ok) {
+                messageArea.classList.add('text-green-600', 'bg-green-100', 'p-3', 'rounded-md');
+                form.reset(); // Reset form on success
+            } else {
+                messageArea.classList.add('text-red-600', 'bg-red-100', 'p-3', 'rounded-md');
+            }
+        } catch (error) {
+            messageArea.textContent = 'Terjadi kesalahan jaringan. Coba lagi.';
+            messageArea.classList.add('text-red-600', 'bg-red-100', 'p-3', 'rounded-md');
+            console.error('Error:', error);
+        } finally {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+        }
+    });
+</script>
+</body>
+</html>

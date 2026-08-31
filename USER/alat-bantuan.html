@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Karyawan - Alat Bantuan Dokumen</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* Sembunyikan scrollbar tapi tetap bisa scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+    <!-- Pustaka Konversi Dokumen -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    </script>
+</head>
+<body class="bg-gray-100 font-sans antialiased flex h-screen overflow-hidden">
+
+    <!-- Sidebar Navigasi -->
+    <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64 bg-gray-800">
+            <div class="flex items-center justify-center h-16 bg-gray-900">
+                <span class="text-white font-bold text-xl uppercase tracking-wider">Portal Internal</span>
+            </div>
+            <div class="flex-1 flex flex-col overflow-y-auto no-scrollbar">
+                <nav class="flex-1 px-2 py-4 space-y-2">
+                    <!-- 1. Beranda (Aktif) -->
+                    <a href="dashboard.html" class="bg-gray-900 text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-home text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Beranda
+                    </a>
+                    
+                    <!-- 2. Tugas Saya -->
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+                        <i class="fas fa-tasks text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Tugas Saya
+                    </a>
+                    
+                    <!-- 3. Direktori Staf -->
+                    <a href="direktori-staf.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+                        <i class="fas fa-address-book text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Direktori Staf
+                    </a>
+
+                    <!-- 4. Pusat Bantuan -->
+                    <a href="bantuan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+                        <i class="fas fa-question-circle text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Pusat Bantuan
+                    </a>
+
+                    <!-- 5. Alat Bantuan Dokumen -->
+                    <a href="alat-bantuan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+                        <i class="fas fa-toolbox text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Alat Bantuan Dokumen
+                    </a>
+
+                    <!-- Jadwal & Kalender -->
+                    <a href="jadwal-rapat.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-plus text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Jadwal Rapat
+                    </a>
+                    <a href="kalender-kegiatan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-alt text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Kalender Kegiatan
+                    </a>
+
+                    <!-- 6. Profil Pengguna -->
+                    <a href="profile.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+                        <i class="fas fa-user-circle text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Profil Saya
+                    </a>
+
+                    <!-- 6. Logout -->
+                    <a href="/logout" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-200 mt-8">
+                        <i class="fas fa-sign-out-alt text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Logout
+                    </a>
+
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Konten Utama -->
+    <div class="flex flex-col w-0 flex-1 overflow-hidden">
+        <div class="relative z-10 flex-shrink-0 flex h-16 bg-white shadow items-center px-4 justify-between">
+            <h2 class="text-2xl font-semibold text-gray-800">Sistem Alat Bantuan</h2>
+            <div class="text-right hidden sm:block">
+                <p class="text-sm font-medium text-gray-700">Akun Staf</p>
+            </div>
+        </div>
+
+        <main class="flex-1 relative overflow-y-auto focus:outline-none bg-gray-50 no-scrollbar">
+            <div class="py-6">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                    
+                    <div class="mb-6">
+                        <p class="text-gray-600">Sistem utilitas pintar untuk mempermudah pengelolaan dokumen secara lokal.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        
+                        <!-- Fitur 1: Word ke PDF -->
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                            <div class="p-6">
+                                <div class="flex items-center mb-4">
+                                    <div class="bg-red-100 p-3 rounded-lg mr-4">
+                                        <i class="fas fa-file-pdf text-red-600 text-xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-gray-900">Word ke PDF</h3>
+                                </div>
+                                <input type="file" id="file-word-pdf" accept=".docx" class="hidden">
+                                <div id="dropzone-word-pdf" onclick="document.getElementById('file-word-pdf').click()" class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 transition-colors h-32 flex flex-col justify-center">
+                                    <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                                    <p id="text-word-pdf" class="text-sm text-gray-600 font-medium">Pilih file Word (.docx)</p>
+                                </div>
+                                <button id="btn-word-pdf" onclick="prosesWordKePDF()" class="mt-4 w-full bg-red-600 text-white py-2 rounded-md font-medium opacity-50 cursor-not-allowed" disabled>Ubah ke PDF</button>
+                            </div>
+                        </div>
+
+                        <!-- Fitur 2: PDF ke Word -->
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                            <div class="p-6">
+                                <div class="flex items-center mb-4">
+                                    <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                                        <i class="fas fa-file-word text-blue-600 text-xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-gray-900">PDF ke Word</h3>
+                                </div>
+                                <input type="file" id="file-pdf-word" accept=".pdf" class="hidden">
+                                <div id="dropzone-pdf-word" onclick="document.getElementById('file-pdf-word').click()" class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 transition-colors h-32 flex flex-col justify-center">
+                                    <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                                    <p id="text-pdf-word" class="text-sm text-gray-600 font-medium">Pilih file PDF (.pdf)</p>
+                                </div>
+                                <button id="btn-pdf-word" onclick="prosesPDFKeWord()" class="mt-4 w-full bg-blue-600 text-white py-2 rounded-md font-medium opacity-50 cursor-not-allowed" disabled>Ubah ke Word</button>
+                            </div>
+                        </div>
+
+                        <!-- Fitur 3: Ringkas Dokumen -->
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                            <div class="p-6">
+                                <div class="flex items-center mb-4">
+                                    <div class="bg-indigo-100 p-3 rounded-lg mr-4">
+                                        <i class="fas fa-compress-alt text-indigo-600 text-xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-gray-900">Ringkas Dokumen</h3>
+                                </div>
+                                <input type="file" id="file-ringkas" accept=".docx" class="hidden">
+                                <div id="dropzone-ringkas" onclick="document.getElementById('file-ringkas').click()" class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 transition-colors h-32 flex flex-col justify-center">
+                                    <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                                    <p id="text-ringkas" class="text-sm text-gray-600 font-medium">Pilih file Word (.docx)</p>
+                                </div>
+                                <button id="btn-ringkas" onclick="prosesRingkas()" class="mt-4 w-full bg-indigo-600 text-white py-2 rounded-md font-medium opacity-50 cursor-not-allowed" disabled>Ringkas Sekarang</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Hasil Ringkasan -->
+    <div id="modal-ringkasan" class="fixed inset-0 bg-gray-800 bg-opacity-75 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-2/3 lg:w-1/2 max-h-[90vh] flex flex-col">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-gray-900">Hasil Ringkasan Dokumen</h3>
+                <button onclick="tutupModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="px-6 py-4 overflow-y-auto flex-1">
+                <div id="konten-ringkasan" class="text-gray-700 leading-relaxed"></div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-200 text-right">
+                <button onclick="tutupModal()" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIKA JAVASCRIPT DIMULAI DARI SINI -->
+    <script>
+        // Fungsi inisialisasi input file
+        function setupFileInput(idInput, idText, idBtn) {
+            const inputElement = document.getElementById(idInput);
+            const textElement = document.getElementById(idText);
+            const btnElement = document.getElementById(idBtn);
+
+            inputElement.addEventListener('change', function() {
+                if (this.files && this.files.length > 0) {
+                    const fileName = this.files[0].name;
+                    textElement.innerHTML = `<span class="text-blue-600 font-bold">${fileName}</span> siap diproses.`;
+                    btnElement.disabled = false;
+                    btnElement.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            });
+        }
+
+        setupFileInput('file-word-pdf', 'text-word-pdf', 'btn-word-pdf');
+        setupFileInput('file-pdf-word', 'text-pdf-word', 'btn-pdf-word');
+        setupFileInput('file-ringkas', 'text-ringkas', 'btn-ringkas');
+
+        // Fungsi utilitas ubah status tombol
+        function setStatusTombol(idBtn, status, teksAwal = '') {
+            const btn = document.getElementById(idBtn);
+            if (status === 'loading') {
+                btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...`;
+                btn.disabled = true;
+                btn.classList.add('opacity-75', 'cursor-wait');
+            } else {
+                btn.innerHTML = teksAwal;
+                btn.disabled = false;
+                btn.classList.remove('opacity-75', 'cursor-wait');
+            }
+        }
+
+        // ==========================================
+        // FITUR 1: Word ke PDF
+        // ==========================================
+        function prosesWordKePDF() {
+            const input = document.getElementById('file-word-pdf');
+            const file = input.files[0];
+            if (!file) return;
+
+            setStatusTombol('btn-word-pdf', 'loading');
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                mammoth.convertToHtml({arrayBuffer: event.target.result})
+                    .then(function(result) {
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = result.value;
+                        tempDiv.style.padding = '40px';
+                        tempDiv.style.fontFamily = 'Helvetica, sans-serif';
+
+                        const namaFileOutput = file.name.replace(/\.[^/.]+$/, "") + ".pdf";
+                        html2pdf().set({
+                            margin: 0.5,
+                            filename: namaFileOutput,
+                            html2canvas: { scale: 2 },
+                            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+                        }).from(tempDiv).save().then(() => {
+                            setStatusTombol('btn-word-pdf', 'reset', 'Ubah ke PDF');
+                        });
+                    }).catch(err => {
+                        console.error(err);
+                        alert("Gagal membaca dokumen Word. Pastikan format file adalah .docx yang valid.");
+                        setStatusTombol('btn-word-pdf', 'reset', 'Ubah ke PDF');
+                    });
+            };
+            reader.readAsArrayBuffer(file);
+        }
+// ==========================================
+// FITUR 2: PDF ke Word (MENGGUNAKAN BACKEND)
+// ==========================================
+async function prosesPDFKeWord() {
+    const input = document.getElementById('file-pdf-word');
+    const file = input.files[0];
+    if (!file) return;
+
+    setStatusTombol('btn-pdf-word', 'loading');
+    
+    // Siapkan file untuk dikirim ke backend
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        // Kirim ke server Python (Berjalan di port 5000)
+        const response = await fetch('http://127.0.0.1:5000/api/pdf-to-word', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) throw new Error('Konversi gagal di sisi server');
+
+        // Terima file Word asli dari server
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        
+        // Buat tautan unduh otomatis
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = file.name.replace(/\.[^/.]+$/, "") + ".docx";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+    } catch (err) {
+        console.error(err);
+        alert("Server backend belum menyala atau terjadi kesalahan.");
+    } finally {
+        setStatusTombol('btn-pdf-word', 'reset', 'Ubah ke Word');
+    }
+}
+
+// ==========================================
+// FITUR 3: RINGKAS DOKUMEN (MENGGUNAKAN BACKEND)
+// ==========================================
+async function prosesRingkas() {
+    const input = document.getElementById('file-ringkas');
+    const file = input.files[0];
+    if (!file) return;
+
+    setStatusTombol('btn-ringkas', 'loading', 'Ringkas Sekarang');
+    
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        // Asumsi server backend berjalan di port 5000 dengan endpoint /api/summarize
+        const response = await fetch('http://127.0.0.1:5000/api/summarize', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            // Jika server mengembalikan error (status 4xx atau 5xx), tampilkan pesan error dari JSON
+            throw new Error(result.error || 'Proses ringkasan gagal di sisi server.');
+        }
+
+        const kontenRingkasan = document.getElementById('konten-ringkasan');
+        const summaryText = result.summary || 'Tidak ada hasil ringkasan untuk ditampilkan.';
+        // Ubah hasil teks menjadi paragraf HTML agar formatnya lebih rapi
+        kontenRingkasan.innerHTML = summaryText.split('\n\n').map(p => `<p class="mb-4 last:mb-0">${p}</p>`).join('');
+        document.getElementById('modal-ringkasan').classList.remove('hidden');
+
+    } catch (err) {
+        console.error(err);
+        alert("Gagal meringkas dokumen: " + err.message);
+    } finally {
+        setStatusTombol('btn-ringkas', 'reset', 'Ringkas Sekarang');
+    }
+}
+
+// Fungsi untuk mengelola modal
+function tutupModal() {
+    document.getElementById('modal-ringkasan').classList.add('hidden');
+}
+    </script>
+</body>
+</html>
