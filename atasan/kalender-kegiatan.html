@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atasan - Kalender Kegiatan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <div class="w-64 bg-gray-800 text-white flex flex-col">
+            <div class="px-8 py-6 bg-gray-900">
+                <h2 class="text-2xl font-semibold">Portal Atasan</h2>
+            </div>
+            <nav class="flex-1 px-4 py-4 space-y-2">
+                <a href="dashboard.html" class="flex items-center px-4 py-2 hover:bg-gray-700 rounded-md"><i class="fas fa-tachometer-alt mr-3"></i> Dashboard</a>
+                <a href="tim-saya.html" class="flex items-center px-4 py-2 hover:bg-gray-700 rounded-md"><i class="fas fa-users mr-3"></i> Tim Saya</a>
+                <a href="persetujuan.html" class="flex items-center px-4 py-2 hover:bg-gray-700 rounded-md"><i class="fas fa-check-square mr-3"></i> Persetujuan</a>
+                <a href="jadwal-rapat.html" class="flex items-center px-4 py-2 hover:bg-gray-700 rounded-md"><i class="fas fa-calendar-plus mr-3"></i> Jadwal Rapat</a>
+                <a href="kalender-kegiatan.html" class="flex items-center px-4 py-2 bg-gray-700 rounded-md"><i class="fas fa-calendar-alt mr-3"></i> Kalender Kegiatan</a>
+                <a href="kelola-pengumuman.html" class="flex items-center px-4 py-2 hover:bg-gray-700 rounded-md"><i class="fas fa-bullhorn mr-3"></i> Kelola Pengumuman</a>
+                <a href="/logout" class="flex items-center px-4 py-2 hover:bg-gray-700 rounded-md mt-auto"><i class="fas fa-sign-out-alt mr-3"></i> Logout</a>
+            </nav>
+        </div>
+        <!-- Main content -->
+        <div class="flex-1 p-10">
+            <h1 class="text-3xl font-bold mb-6">Kalender Kegiatan Perusahaan</h1>
+            
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800">Agustus 2026</h2>
+                    <div>
+                        <button class="text-gray-500 hover:text-gray-700"><i class="fas fa-chevron-left"></i></button>
+                        <button class="text-gray-500 hover:text-gray-700 ml-4"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Calendar Grid -->
+                <div class="grid grid-cols-7 gap-px bg-gray-200 border border-gray-200">
+                    <!-- Days of the week -->
+                    <div class="text-center py-2 bg-gray-100 text-sm font-semibold text-gray-600">Min</div>
+                    <div class="text-center py-2 bg-gray-100 text-sm font-semibold text-gray-600">Sen</div>
+                    <div class="text-center py-2 bg-gray-100 text-sm font-semibold text-gray-600">Sel</div>
+                    <div class="text-center py-2 bg-gray-100 text-sm font-semibold text-gray-600">Rab</div>
+                    <div class="text-center py-2 bg-gray-100 text-sm font-semibold text-gray-600">Kam</div>
+                    <div class="text-center py-2 bg-gray-100 text-sm font-semibold text-gray-600">Jum</div>
+                    <div class="text-center py-2 bg-gray-100 text-sm font-semibold text-gray-600">Sab</div>
+
+                    <!-- Dates -->
+                    <div class="bg-gray-50 h-28"></div> <div class="bg-gray-50 h-28"></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">1</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">2</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">3</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">4</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">5</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">6</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">7</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">8</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">9</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">10</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">11</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">12</span>
+                        <div class="text-xs bg-teal-100 text-teal-800 rounded px-1 mt-1 truncate">Town Hall</div>
+                    </div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">13</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">14</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">15</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">16</span></div>
+                    <div class="bg-white h-28 p-2 relative bg-blue-50"><span class="text-sm font-bold">17</span>
+                        <div class="text-xs bg-red-100 text-red-800 rounded px-1 mt-1 truncate">Hari Kemerdekaan</div>
+                    </div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">18</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">19</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">20</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">21</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">22</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">23</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">24</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">25</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">26</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">27</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">28</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">29</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">30</span></div>
+                    <div class="bg-white h-28 p-2 relative"><span class="text-sm">31</span></div>
+                    <div class="bg-gray-50 h-28"></div> <div class="bg-gray-50 h-28"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
