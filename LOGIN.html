@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Karyawan - Cyber Security Access</title>
+    <!-- Google Fonts: Orbitron & Rajdhani / Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        orbitron: ['"Orbitron"', 'sans-serif'],
+                        rajdhani: ['"Rajdhani"', 'sans-serif'],
+                        mono: ['"Share Tech Mono"', 'monospace'],
+                    },
+                    colors: {
+                        cyber: {
+                            dark: '#030712',
+                            panel: 'rgba(10, 16, 30, 0.75)',
+                            cyan: '#00f0ff',
+                            neon: '#00ff66',
+                            purple: '#b026ff',
+                            blue: '#0ea5e9',
+                            danger: '#ff0055'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Cyberpunk Scanline Effect */
+        .scanlines {
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 240, 255, 0.03) 50%
+            ), linear-gradient(
+                90deg,
+                rgba(255, 0, 0, 0.02),
+                rgba(0, 255, 0, 0.01),
+                rgba(0, 0, 255, 0.02)
+            );
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* Cyber Grid Background */
+        .cyber-grid {
+            background-image: 
+                linear-gradient(to right, rgba(0, 240, 255, 0.07) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 240, 255, 0.07) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Glow effects */
+        .neon-glow-cyan {
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.3), inset 0 0 15px rgba(0, 240, 255, 0.1);
+        }
+        .neon-glow-btn {
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+        .neon-glow-btn:hover {
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.75), inset 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+        .text-glow-cyan {
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.7), 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+        .text-glow-green {
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.7);
+        }
+
+        /* Cyber Corner Clip */
+        .clip-cyber {
+            clip-path: polygon(
+                0 0, 
+                calc(100% - 20px) 0, 
+                100% 20px, 
+                100% 100%, 
+                20px 100%, 
+                0 calc(100% - 20px)
+            );
+        }
+        .clip-btn {
+            clip-path: polygon(
+                12px 0%, 
+                100% 0%, 
+                100% calc(100% - 12px), 
+                calc(100% - 12px) 100%, 
+                0% 100%, 
+                0% 12px
+            );
+        }
+
+        /* Scanning Laser Beam */
+        @keyframes scanBeam {
+            0% { top: -20%; opacity: 0; }
+            30% { opacity: 0.8; }
+            70% { opacity: 0.8; }
+            100% { top: 120%; opacity: 0; }
+        }
+        .scan-beam {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #00f0ff, #b026ff, #00f0ff, transparent);
+            box-shadow: 0 0 15px #00f0ff;
+            animation: scanBeam 6s linear infinite;
+            pointer-events: none;
+        }
+
+        /* Floating HUD Badge */
+        @keyframes floatHud {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(0.5deg); }
+        }
+        .animate-hud {
+            animation: floatHud 4s ease-in-out infinite;
+        }
+
+        /* Glitch text effect on hover */
+        .glitch:hover {
+            animation: glitch-anim 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+        }
+        @keyframes glitch-anim {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+    </style>
+</head>
+<body class="bg-[#030712] text-slate-100 font-rajdhani antialiased min-h-screen flex overflow-x-hidden relative selection:bg-cyan-400 selection:text-black">
+
+    <!-- Interactive Cyber Matrix / Particle Canvas -->
+    <canvas id="cyber-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Scanline & Ambient Effects Layer -->
+    <div class="fixed inset-0 scanlines z-10"></div>
+    <div class="fixed inset-0 cyber-grid opacity-30 z-0 pointer-events-none"></div>
+    <div class="scan-beam z-10"></div>
+
+    <!-- Glowing Orbs in Background -->
+    <div class="fixed top-[-10%] left-[-5%] w-[450px] h-[450px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] right-[-5%] w-[450px] h-[450px] bg-purple-600/15 rounded-full blur-[140px] pointer-events-none z-0"></div>
+    <div class="fixed top-[40%] right-[30%] w-[300px] h-[300px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none z-0"></div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="relative z-20 w-full min-h-screen flex flex-col lg:flex-row items-stretch">
+
+        <!-- SISI KIRI: Cyber Terminal & Visual HUD (Desktop) -->
+        <div class="hidden lg:flex lg:w-1/2 p-12 xl:p-16 flex-col justify-between relative border-r border-cyan-500/20 backdrop-blur-[2px]">
+            
+            <!-- Top Cyber Header -->
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-lg bg-cyan-950/70 border border-cyan-400/50 flex items-center justify-center shadow-[0_0_15px_rgba(0,240,255,0.4)] relative group">
+                        <i class="fas fa-microchip text-cyan-400 text-xl group-hover:scale-110 transition-transform"></i>
+                        <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full animate-ping"></span>
+                        <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full"></span>
+                    </div>
+                    <div>
+                        <div class="font-orbitron font-bold text-xl text-white tracking-widest text-glow-cyan flex items-center gap-2">
+                            CYBER<span class="text-cyan-400">PORTAL</span>
+                        </div>
+                        <div class="font-mono text-[11px] text-cyan-400/70 tracking-widest flex items-center gap-1.5">
+                            <span class="inline-block w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
+                            CORE SYSTEM v4.8.9 [ONLINE]
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Server Ping Badge -->
+                <div class="px-3 py-1 bg-black/60 border border-emerald-500/30 rounded-md font-mono text-xs text-emerald-400 flex items-center gap-2">
+                    <i class="fas fa-signal text-[10px]"></i>
+                    <span>PING: <span id="ping-rate">24</span>ms</span>
+                </div>
+            </div>
+
+            <!-- Central HUD / Cyber Graphic Showcase -->
+            <div class="my-auto py-6 animate-hud">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-400/40 text-cyan-300 font-mono text-xs uppercase tracking-wider mb-6 backdrop-blur-md shadow-[0_0_15px_rgba(0,240,255,0.15)]">
+                    <i class="fas fa-shield-halved text-cyan-400"></i>
+                    <span>QUANTUM ENCRYPTION PROTOCOL ACTIVE</span>
+                </div>
+
+                <h1 class="font-orbitron text-4xl xl:text-5xl font-black text-white leading-tight mb-4 tracking-wide">
+                    INTEGRATED <br/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 text-glow-cyan">
+                        CYBERNETIC
+                    </span> WORKSPACE
+                </h1>
+
+                <p class="text-slate-300 text-base xl:text-lg max-w-lg leading-relaxed mb-8 font-rajdhani font-semibold">
+                    Portal otorisasi digital terpadu untuk monitoring divisi, manajemen berkas rahasia, dan komunikasi terenkripsi realtime.
+                </p>
+
+                <!-- Interactive Terminal Code Window -->
+                <div class="bg-black/80 border border-cyan-500/30 rounded-xl p-4 font-mono text-xs text-cyan-300/90 shadow-[0_0_25px_rgba(0,0,0,0.8)] backdrop-blur-md max-w-lg">
+                    <div class="flex items-center justify-between border-b border-cyan-500/20 pb-2 mb-3 text-slate-400">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+                            <span class="ml-2 text-[11px] text-cyan-400 font-mono">AUTH_DAEMON.sh</span>
+                        </div>
+                        <span class="text-[10px] text-slate-500">SSL / TLS 1.3</span>
+                    </div>
+                    <div class="space-y-1.5 text-[12px]">
+                        <p class="text-slate-400">> Initializing neural link security layer...</p>
+                        <p class="text-emerald-400">> [OK] Firewall: Threat protection active</p>
+                        <p class="text-purple-400">> [OK] Node ID: #882-SYS-CORP</p>
+                        <p class="text-cyan-300 flex items-center">
+                            > STATUS: READY FOR AUTHENTICATION
+                            <span class="inline-block w-2 h-4 bg-cyan-400 ml-1 animate-pulse"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Left Telemetry -->
+            <div class="flex items-center justify-between pt-6 border-t border-cyan-500/20 font-mono text-xs text-slate-400">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-network-wired text-cyan-400"></i>
+                    <span>NETWORK: SECURE_NODE_01</span>
+                </div>
+                <div class="flex items-center gap-4 text-cyan-400/80">
+                    <span>LATENCY: ZERO-LOSS</span>
+                    <span>PROTO: HTTPS/WSS</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SISI KANAN: Login Card Form (Cyber Frame) -->
+        <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-10 lg:p-12 relative">
+            
+            <!-- Cyber Form Container Card -->
+            <div class="w-full max-w-md bg-[#0b1329]/85 backdrop-blur-xl border border-cyan-500/40 p-8 sm:p-10 rounded-2xl relative shadow-[0_0_40px_rgba(0,240,255,0.15)] clip-cyber neon-glow-cyan">
+                
+                <!-- Decorative Corner Accents -->
+                <div class="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-cyan-400"></div>
+                <div class="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-cyan-400"></div>
+                <div class="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-cyan-400"></div>
+                <div class="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-cyan-400"></div>
+
+                <!-- Mobile Brand Header -->
+                <div class="flex items-center gap-3 mb-6 lg:hidden">
+                    <div class="w-10 h-10 rounded bg-cyan-950 border border-cyan-400 flex items-center justify-center text-cyan-400 shadow-[0_0_10px_rgba(0,240,255,0.5)]">
+                        <i class="fas fa-microchip text-lg"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-orbitron font-bold text-lg text-white tracking-wider">CYBER<span class="text-cyan-400">PORTAL</span></h2>
+                        <p class="font-mono text-[10px] text-cyan-400/70">SECURE SYSTEM ACCESS</p>
+                    </div>
+                </div>
+
+                <!-- Card Header -->
+                <div class="mb-8">
+                    <div class="font-mono text-xs text-cyan-400 tracking-widest uppercase mb-1 flex items-center gap-2">
+                        <span class="w-2 h-2 bg-cyan-400 rounded-full animate-ping"></span>
+                        LOGIN OTORISASI
+                    </div>
+                    <h2 class="font-orbitron text-2xl sm:text-3xl font-extrabold text-white tracking-wide">
+                        SELAMAT DATANG
+                    </h2>
+                    <p class="text-slate-400 text-sm font-semibold mt-1">Masukkan kredensial identitas Anda ke dalam jaringan.</p>
+                </div>
+
+                <!-- Cyber Error Alert Box -->
+                <div id="error-message" class="hidden mb-6 p-3.5 rounded-lg bg-red-950/60 border border-red-500/50 text-red-300 text-sm flex items-start gap-3 backdrop-blur-md shadow-[0_0_15px_rgba(255,0,85,0.2)]">
+                    <i class="fas fa-triangle-exclamation text-red-400 text-base mt-0.5 flex-shrink-0 animate-bounce"></i>
+                    <div id="error-text" class="flex-1 font-mono text-xs"></div>
+                </div>
+
+                <!-- Form Login -->
+                <form id="login-form" class="space-y-6">
+                    
+                    <!-- Input Email -->
+                    <div>
+                        <label for="email" class="block font-mono text-xs uppercase tracking-wider text-cyan-300 mb-2 flex items-center justify-between">
+                            <span><i class="fas fa-id-card mr-1 text-cyan-400"></i> IDENTITAS EMAIL</span>
+                            <span class="text-[10px] text-slate-500 font-normal">REQUIRED</span>
+                        </label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-cyan-400/60 group-focus-within:text-cyan-400 transition-colors">
+                                <i class="fas fa-envelope text-sm"></i>
+                            </div>
+                            <input 
+                                type="email" 
+                                name="email" 
+                                id="email" 
+                                autocomplete="email" 
+                                class="w-full pl-10 pr-4 py-3 bg-black/60 border border-cyan-500/30 rounded-lg text-sm text-cyan-100 placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all font-mono shadow-inner group-hover:border-cyan-500/50" 
+                                placeholder="karyawan@perusahaan.com" 
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Input Password -->
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="password" class="font-mono text-xs uppercase tracking-wider text-cyan-300 flex items-center">
+                                <i class="fas fa-key mr-1 text-cyan-400"></i> KATA SANDI / KUNCI
+                            </label>
+                            <a href="#" class="font-mono text-xs text-cyan-400 hover:text-cyan-300 hover:underline transition-colors">
+                                Lupa Kunci?
+                            </a>
+                        </div>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-cyan-400/60 group-focus-within:text-cyan-400 transition-colors">
+                                <i class="fas fa-lock text-sm"></i>
+                            </div>
+                            <input 
+                                type="password" 
+                                name="password" 
+                                id="password" 
+                                autocomplete="current-password" 
+                                class="w-full pl-10 pr-11 py-3 bg-black/60 border border-cyan-500/30 rounded-lg text-sm text-cyan-100 placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all font-mono shadow-inner group-hover:border-cyan-500/50" 
+                                placeholder="••••••••" 
+                                required
+                            >
+                            <button 
+                                type="button" 
+                                id="toggle-password" 
+                                class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-cyan-400/60 hover:text-cyan-300 focus:outline-none transition-colors"
+                                aria-label="Toggle Password"
+                            >
+                                <i class="fas fa-eye text-sm" id="eye-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Remember Me -->
+                    <div class="flex items-center justify-between font-mono text-xs">
+                        <label class="flex items-center cursor-pointer select-none text-slate-300 hover:text-cyan-300 transition-colors">
+                            <input 
+                                id="remember-me" 
+                                name="remember-me" 
+                                type="checkbox" 
+                                class="w-4 h-4 rounded bg-black/80 border-cyan-500/50 text-cyan-500 focus:ring-0 focus:ring-offset-0 cursor-pointer accent-cyan-400"
+                            >
+                            <span class="ml-2">Simpan Sesi Token</span>
+                        </label>
+                        <span class="text-emerald-400 flex items-center gap-1">
+                            <i class="fas fa-shield-check text-[11px]"></i> 256-BIT SSL
+                        </span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button 
+                        type="submit" 
+                        id="submit-button" 
+                        class="w-full relative group overflow-hidden py-3.5 px-5 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white font-orbitron font-bold text-sm tracking-wider uppercase rounded-lg neon-glow-btn clip-btn active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                        <span class="relative z-10 flex items-center justify-center gap-2">
+                            <span>MASUK KE SISTEM</span>
+                            <i class="fas fa-angles-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                        </span>
+                        <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                    </button>
+                </form>
+
+                <!-- Footer Box -->
+                <div class="mt-8 pt-5 border-t border-cyan-500/20 text-center space-y-3 font-rajdhani font-semibold">
+                    <p class="text-sm text-slate-400">
+                        Belum terdaftar dalam protokol? 
+                        <a href="register.html" class="text-cyan-400 hover:text-cyan-300 font-bold hover:underline transition-colors ml-1">
+                            Daftar Akun Baru &rarr;
+                        </a>
+                    </p>
+                    <div class="flex items-center justify-center gap-2 font-mono text-[11px] text-slate-500">
+                        <i class="fas fa-headset text-cyan-400"></i>
+                        <span>Bantuan Sistem: <a href="#" class="text-cyan-400/80 hover:underline">Cyber Support Desk</a></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    // ==========================================
+    // 1. CANVAS CYBER PARTICLES & MATRIX NODES
+    // ==========================================
+    const canvas = document.getElementById('cyber-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    });
+
+    const particles = [];
+    const particleCount = Math.min(width > 768 ? 65 : 30, 80);
+
+    class Particle {
+        constructor() {
+            this.reset();
+        }
+        reset() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * 0.8;
+            this.vy = (Math.random() - 0.5) * 0.8;
+            this.radius = Math.random() * 2 + 1;
+            this.color = Math.random() > 0.4 ? '#00f0ff' : (Math.random() > 0.5 ? '#b026ff' : '#00ff66');
+            this.alpha = Math.random() * 0.5 + 0.2;
+        }
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+
+            if (this.x < 0 || this.x > width) this.vx *= -1;
+            if (this.y < 0 || this.y > height) this.vy *= -1;
+        }
+        draw() {
+            ctx.save();
+            ctx.globalAlpha = this.alpha;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = this.color;
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+    }
+
+    function animateCyberGrid() {
+        ctx.clearRect(0, 0, width, height);
+
+        // Draw connections between close nodes
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < 130) {
+                    ctx.save();
+                    ctx.globalAlpha = (1 - dist / 130) * 0.25;
+                    ctx.strokeStyle = '#00f0ff';
+                    ctx.lineWidth = 0.75;
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            }
+        }
+
+        // Draw particles
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+
+        requestAnimationFrame(animateCyberGrid);
+    }
+    animateCyberGrid();
+
+    // ==========================================
+    // 2. SIMULATED RANDOM PING
+    // ==========================================
+    const pingRateEl = document.getElementById('ping-rate');
+    if (pingRateEl) {
+        setInterval(() => {
+            const randomPing = Math.floor(Math.random() * 15) + 18;
+            pingRateEl.textContent = randomPing;
+        }, 3000);
+    }
+
+    // ==========================================
+    // 3. SHOW / HIDE PASSWORD TOGGLE
+    // ==========================================
+    const togglePassword = document.getElementById('toggle-password');
+    const passwordInput = document.getElementById('password');
+    const eyeIcon = document.getElementById('eye-icon');
+
+    togglePassword.addEventListener('click', () => {
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        eyeIcon.classList.toggle('fa-eye', !isPassword);
+        eyeIcon.classList.toggle('fa-eye-slash', isPassword);
+    });
+
+    // ==========================================
+    // 4. FORM SUBMISSION HANDLER
+    // ==========================================
+    const form = document.getElementById('login-form');
+    const errorMessage = document.getElementById('error-message');
+    const errorText = document.getElementById('error-text');
+    const submitButton = document.getElementById('submit-button');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorMessage.classList.add('hidden');
+
+        const formData = new FormData(form);
+        const originalContent = submitButton.innerHTML;
+        
+        submitButton.disabled = true;
+        submitButton.innerHTML = `
+            <span class="relative z-10 flex items-center justify-center gap-2">
+                <i class="fas fa-circle-notch fa-spin text-sm text-cyan-300"></i>
+                <span class="font-mono text-xs">MEMVERIFIKASI ENKRIPSI...</span>
+            </span>
+        `;
+
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                submitButton.innerHTML = `
+                    <span class="relative z-10 flex items-center justify-center gap-2 text-emerald-300">
+                        <i class="fas fa-check-circle"></i>
+                        <span class="font-mono text-xs">AKSES DIIZINKAN</span>
+                    </span>
+                `;
+                setTimeout(() => {
+                    window.location.href = result.redirect_url;
+                }, 600);
+            } else {
+                errorText.textContent = '[SECURITY ALERT] ' + (result.error || 'Autentikasi gagal: Kredensial tidak cocok.');
+                errorMessage.classList.remove('hidden');
+            }
+        } catch (error) {
+            errorText.textContent = '[SYSTEM FAULT] Gagal tersambung ke daemon otorisasi server.';
+            errorMessage.classList.remove('hidden');
+        } finally {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalContent;
+        }
+    });
+</script>
+</body>
+</html>
