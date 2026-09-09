@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Karyawan - Tugas Saya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans antialiased flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64 bg-gray-800">
+            <div class="flex items-center justify-center h-16 bg-gray-900">
+                <span class="text-white font-bold text-xl uppercase tracking-wider">Portal Internal</span>
+            </div>
+            <div class="flex-1 flex flex-col overflow-y-auto no-scrollbar">
+                <nav class="flex-1 px-2 py-4 space-y-2">
+                    <a href="dashboard.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-home text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Beranda
+                    </a>
+                    <a href="tugas-saya.html" class="bg-gray-900 text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-tasks text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Tugas Saya
+                    </a>
+                    <a href="direktori-staf.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-address-book text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Direktori Staf
+                    </a>
+                    <a href="bantuan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-question-circle text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Pusat Bantuan
+                    </a>
+                    <a href="alat-bantuan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-toolbox text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Alat Bantuan Dokumen
+                    </a>
+                    <a href="jadwal-rapat.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-plus text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Jadwal Rapat
+                    </a>
+                    <a href="kalender-kegiatan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-alt text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Kalender Kegiatan
+                    </a>
+                    <a href="profile.html" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-user-circle text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Profil Saya
+                    </a>
+                    <a href="/logout" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md mt-8">
+                        <i class="fas fa-sign-out-alt text-gray-400 group-hover:text-gray-300 mr-3 text-lg w-5 text-center"></i>
+                        Logout
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Konten Utama -->
+    <div class="flex flex-col w-0 flex-1 overflow-hidden">
+        <div class="relative z-10 flex-shrink-0 flex h-16 bg-white shadow items-center px-4 justify-between">
+            <h2 class="text-2xl font-semibold text-gray-800">Tugas Saya</h2>
+            <div class="flex items-center gap-3">
+                <div class="text-right hidden sm:block">
+                    <p class="text-sm font-medium text-gray-700">{{ user_name or 'Pengguna' }}</p>
+                    <p class="text-xs text-gray-500">Staf</p>
+                </div>
+                <img class="h-9 w-9 rounded-full border border-gray-200" src="https://ui-avatars.com/api/?name={{ user_name or 'P' }}&background=2563EB&color=fff" alt="Profil">
+            </div>
+        </div>
+
+        <main class="flex-1 relative overflow-y-auto focus:outline-none bg-gray-50 no-scrollbar">
+            <div class="py-6">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                        <!-- Form Tambah Tugas -->
+                        <div class="lg:col-span-1 bg-white shadow-md rounded-lg p-6 h-fit">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Tambah Tugas Baru</h3>
+                            <form id="form-tugas" class="space-y-4">
+                                <input type="hidden" id="tugas-id">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Judul Tugas</label>
+                                    <input type="text" id="tugas-judul" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500" placeholder="Contoh: Selesaikan laporan bulanan" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Deskripsi (opsional)</label>
+                                    <textarea id="tugas-deskripsi" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500" placeholder="Detail tugas..."></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Prioritas</label>
+                                    <select id="tugas-prioritas" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="rendah">Rendah</option>
+                                        <option value="sedang" selected>Sedang</option>
+                                        <option value="tinggi">Tinggi</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Deadline</label>
+                                    <input type="date" id="tugas-deadline" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div id="tugas-message-area" class="text-center text-sm"></div>
+                                <button type="submit" id="btn-simpan-tugas" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 font-medium">
+                                    <i class="fas fa-plus-circle mr-2"></i> Tambahkan Tugas
+                                </button>
+                                <button type="button" id="btn-batal-edit" onclick="batalEdit()" class="hidden w-full bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 font-medium">
+                                    Batal Edit
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Daftar Tugas -->
+                        <div class="lg:col-span-2 bg-white shadow-md rounded-lg overflow-hidden">
+                            <div class="px-6 py-4 border-b flex items-center justify-between flex-wrap gap-2">
+                                <h2 class="text-xl font-semibold text-gray-800">Daftar Tugas</h2>
+                                <div class="flex gap-1 text-sm">
+                                    <button onclick="setFilter('semua')" data-filter="semua" class="filter-btn px-3 py-1 rounded-md font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">Semua</button>
+                                    <button onclick="setFilter('belum')" data-filter="belum" class="filter-btn px-3 py-1 rounded-md font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">Belum</button>
+                                    <button onclick="setFilter('proses')" data-filter="proses" class="filter-btn px-3 py-1 rounded-md font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">Proses</button>
+                                    <button onclick="setFilter('selesai')" data-filter="selesai" class="filter-btn px-3 py-1 rounded-md font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">Selesai</button>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tugas</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Prioritas</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Deadline</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tugas-table-body" class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                                                <i class="fas fa-spinner fa-spin mr-2"></i> Memuat tugas...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast" class="hidden fixed bottom-6 right-6 bg-gray-900 text-white text-sm px-4 py-3 rounded-lg shadow-lg z-50"></div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, query, where, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const CURRENT_USER_ID = "{{ user_id }}";
+
+    // Ambil konfigurasi Firebase dari backend (supaya tidak hardcode di tiap file HTML)
+    const firebaseConfig = await (await fetch('/api/firebase-config')).json();
+    const firebaseApp = initializeApp(firebaseConfig);
+    const fdb = getFirestore(firebaseApp);
+
+    function showToast(msg, isError = false) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.remove('hidden', 'bg-gray-900', 'bg-red-600');
+        toast.classList.add(isError ? 'bg-red-600' : 'bg-gray-900');
+        setTimeout(() => toast.classList.add('hidden'), 3500);
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    const badgePrioritas = {
+        rendah: '<span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-gray-100 text-gray-600">Rendah</span>',
+        sedang: '<span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700">Sedang</span>',
+        tinggi: '<span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-red-100 text-red-700">Tinggi</span>'
+    };
+    const badgeStatus = {
+        belum: 'bg-gray-100 text-gray-600',
+        proses: 'bg-blue-100 text-blue-700',
+        selesai: 'bg-green-100 text-green-700'
+    };
+
+    let daftarTugasCache = [];
+    let filterAktif = 'semua';
+    const cacheNamaAtasan = {}; // supaya tidak berulang kali baca dokumen atasan yang sama
+
+    window.setFilter = function(status) {
+        filterAktif = status;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            if (btn.dataset.filter === status) {
+                btn.classList.add('bg-blue-600', 'text-white');
+                btn.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200');
+            } else {
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200');
+            }
+        });
+        renderTabel();
+    }
+
+    function renderTabel() {
+        const tbody = document.getElementById('tugas-table-body');
+        const data = filterAktif === 'semua' ? daftarTugasCache : daftarTugasCache.filter(t => t.status === filterAktif);
+
+        if (data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">Tidak ada tugas.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = '';
+        data.forEach(t => {
+            const deskripsiHtml = t.deskripsi ? `<p class="text-xs text-gray-500 mt-1">${escapeHtml(t.deskripsi)}</p>` : '';
+            const pemberiHtml = t.diberikan_oleh ? `<p class="text-xs text-indigo-600 mt-1"><i class="fas fa-user-tie mr-1"></i>Dari ${escapeHtml(t.diberikan_oleh)}</p>` : '';
+
+            const selectStatus = `
+                <select onchange="ubahStatus('${t.id}', this.value)" class="text-xs border-0 rounded-full px-2 py-1 font-semibold ${badgeStatus[t.status]} focus:ring-1 focus:ring-blue-400">
+                    <option value="belum" ${t.status === 'belum' ? 'selected' : ''}>Belum Dikerjakan</option>
+                    <option value="proses" ${t.status === 'proses' ? 'selected' : ''}>Sedang Dikerjakan</option>
+                    <option value="selesai" ${t.status === 'selesai' ? 'selected' : ''}>Selesai</option>
+                </select>
+            `;
+
+            let aksiHtml = '<span class="text-gray-300 text-xs">-</span>';
+            if (t.bisa_diedit || t.bisa_dihapus) {
+                aksiHtml = '';
+                if (t.bisa_diedit) {
+                    aksiHtml += `<button onclick='isiFormEdit(${JSON.stringify(t)})' class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</button>`;
+                }
+                if (t.bisa_dihapus) {
+                    aksiHtml += `<button onclick="hapusTugas('${t.id}')" class="text-red-600 hover:text-red-900">Hapus</button>`;
+                }
+            }
+
+            const row = `
+                <tr>
+                    <td class="px-6 py-4">
+                        <div class="text-sm font-medium text-gray-900 ${t.status === 'selesai' ? 'line-through text-gray-400' : ''}">${escapeHtml(t.judul)}</div>
+                        ${deskripsiHtml}
+                        ${pemberiHtml}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">${badgePrioritas[t.prioritas]}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${selectStatus}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${t.deadline_tampil || '-'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">${aksiHtml}</td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', row);
+        });
+    }
+
+    async function ambilNamaAtasan(atasanId) {
+        if (!atasanId) return null;
+        if (cacheNamaAtasan[atasanId]) return cacheNamaAtasan[atasanId];
+        try {
+            const snap = await getDoc(doc(fdb, 'users', atasanId));
+            const nama = snap.exists() ? snap.data().fullname : null;
+            cacheNamaAtasan[atasanId] = nama;
+            return nama;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function formatTanggalTampil(deadlineStr) {
+        if (!deadlineStr) return null;
+        const bulan = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+        const [tahun, bln, tgl] = deadlineStr.split('-');
+        return `${parseInt(tgl)} ${bulan[parseInt(bln) - 1]} ${tahun}`;
+    }
+
+    // ===== REAL-TIME: mendengarkan perubahan koleksi 'tugas' milik user ini =====
+    // Setiap ada tugas baru/berubah/terhapus di Firestore (termasuk saat atasan
+    // memberi tugas baru), tampilan di sini otomatis ter-update TANPA refresh.
+    const tugasQuery = query(collection(fdb, 'tugas'), where('user_id', '==', CURRENT_USER_ID));
+
+    onSnapshot(tugasQuery, async (snapshot) => {
+        const daftarBaru = [];
+        for (const docSnap of snapshot.docs) {
+            const t = docSnap.data();
+            const namaAtasan = t.assigned_by ? await ambilNamaAtasan(t.assigned_by) : null;
+            daftarBaru.push({
+                id: docSnap.id,
+                judul: t.judul,
+                deskripsi: t.deskripsi,
+                prioritas: t.prioritas || 'sedang',
+                status: t.status || 'belum',
+                deadline: t.deadline || null,
+                deadline_tampil: formatTanggalTampil(t.deadline),
+                diberikan_oleh: namaAtasan,
+                bisa_diedit: !t.assigned_by,
+                bisa_dihapus: !t.assigned_by
+            });
+        }
+        daftarBaru.sort((a, b) => (a.status > b.status ? 1 : -1));
+        daftarTugasCache = daftarBaru;
+        renderTabel();
+    }, (error) => {
+        console.error('Realtime listener error:', error);
+        document.getElementById('tugas-table-body').innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">Gagal memuat data tugas real-time.</td></tr>';
+    });
+
+    window.isiFormEdit = function(t) {
+        document.getElementById('tugas-id').value = t.id;
+        document.getElementById('tugas-judul').value = t.judul;
+        document.getElementById('tugas-deskripsi').value = t.deskripsi || '';
+        document.getElementById('tugas-prioritas').value = t.prioritas;
+        document.getElementById('tugas-deadline').value = t.deadline || '';
+        document.getElementById('btn-simpan-tugas').innerHTML = '<i class="fas fa-save mr-2"></i> Simpan Perubahan';
+        document.getElementById('btn-batal-edit').classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function batalEdit() {
+        document.getElementById('form-tugas').reset();
+        document.getElementById('tugas-id').value = '';
+        document.getElementById('btn-simpan-tugas').innerHTML = '<i class="fas fa-plus-circle mr-2"></i> Tambahkan Tugas';
+        document.getElementById('btn-batal-edit').classList.add('hidden');
+        document.getElementById('tugas-message-area').innerHTML = '';
+    }
+    window.batalEdit = batalEdit;
+
+    document.getElementById('form-tugas').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('tugas-id').value;
+        const payload = {
+            judul: document.getElementById('tugas-judul').value.trim(),
+            deskripsi: document.getElementById('tugas-deskripsi').value.trim(),
+            prioritas: document.getElementById('tugas-prioritas').value,
+            deadline: document.getElementById('tugas-deadline').value || null
+        };
+
+        const messageArea = document.getElementById('tugas-message-area');
+        messageArea.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+        messageArea.className = 'text-center text-sm text-gray-600';
+
+        try {
+            const url = id ? `/api/tugas/${id}` : '/api/tugas';
+            const method = id ? 'PUT' : 'POST';
+            const response = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || 'Gagal menyimpan tugas.');
+
+            showToast(result.message);
+            batalEdit();
+            // Tidak perlu panggil ulang manual -- listener realtime otomatis update tampilan.
+        } catch (err) {
+            messageArea.textContent = err.message;
+            messageArea.className = 'text-center text-sm text-red-600';
+        }
+    });
+
+    window.ubahStatus = async function(id, statusBaru) {
+        try {
+            const response = await fetch(`/api/tugas/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: statusBaru })
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error);
+            // Listener realtime otomatis memperbarui tampilan.
+        } catch (err) {
+            showToast('Gagal mengubah status: ' + err.message, true);
+        }
+    }
+
+    window.hapusTugas = async function(id) {
+        if (!confirm('Apakah Anda yakin ingin menghapus tugas ini?')) return;
+        try {
+            const response = await fetch(`/api/tugas/${id}`, { method: 'DELETE' });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error);
+            showToast(result.message);
+            // Listener realtime otomatis memperbarui tampilan.
+        } catch (err) {
+            showToast('Gagal menghapus tugas: ' + err.message, true);
+        }
+    }
+
+    // Panggil langsung (bukan lewat DOMContentLoaded) -- script type="module" sudah
+    // pasti berjalan setelah HTML selesai di-parse.
+    setFilter('semua');
+</script>
+</body>
+</html>
